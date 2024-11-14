@@ -49,8 +49,10 @@ namespace pet_hotel.Controllers
 
         [HttpPost]
         public Pet Post(Pet pet) {
+            pet.checkedInAt = null;
             _context.Add(pet);
             _context.SaveChanges();
+            Response.StatusCode = 201;
             return pet;
         }
 
@@ -91,7 +93,7 @@ namespace pet_hotel.Controllers
             toUpdate.breed = pet.breed;
             toUpdate.color = pet.color;
             toUpdate.petOwnerId = pet.petOwnerId;
-            toUpdate.checkedinAt = pet.checkedinAt;
+            toUpdate.checkedInAt = pet.checkedInAt;
             _context.SaveChanges();
             return toUpdate;
         }
@@ -104,7 +106,7 @@ namespace pet_hotel.Controllers
                 Response.StatusCode=404;
                 return null;
             }
-            toUpdate.checkedinAt = DateTime.UtcNow;
+            toUpdate.checkedInAt = DateTime.UtcNow;
 
             _context.SaveChanges();
             return toUpdate;
@@ -118,7 +120,7 @@ namespace pet_hotel.Controllers
                 Response.StatusCode=404;
                 return null;
             }
-            toUpdate.checkedinAt = null;
+            toUpdate.checkedInAt = null;
 
             _context.SaveChanges();
             return toUpdate;

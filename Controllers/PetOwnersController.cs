@@ -43,6 +43,7 @@ PUT /api/petowners/:id should update the Pet Owner with the given primary key (i
         public PetOwner Post(PetOwner petOwner) {
             _context.Add(petOwner);
             _context.SaveChanges();
+            Response.StatusCode = 201;
             return petOwner;
         }
 

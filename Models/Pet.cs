@@ -34,7 +34,7 @@ namespace pet_hotel
         public PetColor color {get; set;}
 
         
-        public DateTime? checkedinAt {get; set;}
+        public DateTime? checkedInAt {get; set;}
 
         [Required, ForeignKey("PetOwnerId")]
         public int petOwnerId {get; set;}
