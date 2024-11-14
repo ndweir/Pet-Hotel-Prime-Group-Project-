@@ -19,13 +19,110 @@ namespace pet_hotel.Controllers
             _context = context;
         }
 
+        // `GET /api/pets` should return a list of pet objects. Each pet should contain a nested `petOwner` field that contains the full `PetOwner` object that owns this pet. Be sure that the `PetOwner` object does not additionally circularly reference the pets owned. DONE
+        // `GET /api/pets/:id` should return the pet object with the given id. DONE
+        // `POST /api/pets` should create a new pet object. The body of the HTTP post should contain the `Pet` object in JSON format with all required fields. The `Pet` object should contain a reference to a `PetOwnerId`, which is the primary key of the `PetOwner` that the pet belongs to. DONE
+        // `PUT /api/pets/:id` should update the `Pet` with the given primary key (id). The HTTP Body should include the entire `Pet` object to be updated with all required keys, including the `id`.
+        // `DELETE /api/pets/:id` should delete the pet with the given id. DONE
+        // `PUT /api/pets/:id/checkin` should check in a pet with given id. Checking in will set the `checkedInAt` field to an ISO8601 timestamp that set to the current time.
+        // `PUT /api/pets/:id/checkout` should check out the pet with the given id. Checking out simply resets the `checkedInAt` field to `null`.
+
+
+
+
+
+
+
+
+
+
+
+
+
         // This is just a stub for GET / to prevent any weird frontend errors that 
         // occur when the route is missing in this controller
         [HttpGet]
-        public IEnumerable<Pet> GetPets() {
-            return new List<Pet>();
+         public IEnumerable<Pet> GetPets() {
+            return _context.Pets
+            .Include(pet => pet.petOwner);
         }
 
+        [HttpPost]
+        public Pet Post(Pet pet) {
+            _context.Add(pet);
+            _context.SaveChanges();
+            return pet;
+        }
+
+         [HttpGet("{id}")]
+        public ActionResult<Pet> GetById(int id){
+            Pet pet = _context.Pets.Include(pet => pet.petOwner)
+            .SingleOrDefault(pet => pet.id == id);
+
+            if(pet is null){
+                return NotFound();
+            }
+            return pet;
+        }
+    
+        [HttpDelete("{id}")]
+        public void Delete(int id)
+        {
+            //set the pet variable equal to the pet in the pets
+            //table with the id that was sent as a parameter
+            Pet pet = _context.Pets.Find(id);
+            //remove that pet  from the pets table
+            _context.Pets.Remove(pet);
+            //save changes
+            _context.SaveChanges();
+            //send status 204 - no content to return
+            Response.StatusCode = 204;
+        }
+
+        [HttpPut("{id}")]
+        public Pet updatePet(int id, Pet pet)
+        {
+            Pet toUpdate = _context.Pets.Find(id);
+            if(toUpdate is null){
+                Response.StatusCode=404;
+                return null;
+            }
+            toUpdate.name = pet.name;
+            toUpdate.breed = pet.breed;
+            toUpdate.color = pet.color;
+            toUpdate.petOwnerId = pet.petOwnerId;
+            toUpdate.checkedinAt = pet.checkedinAt;
+            _context.SaveChanges();
+            return toUpdate;
+        }
+
+        [HttpPut("{id}/checkin")]
+        public Pet checkinPet(int id)
+        {
+            Pet toUpdate = _context.Pets.Find(id);
+            if(toUpdate is null){
+                Response.StatusCode=404;
+                return null;
+            }
+            toUpdate.checkedinAt = DateTime.UtcNow;
+
+            _context.SaveChanges();
+            return toUpdate;
+        }
+
+        [HttpPut("{id}/checkout")]
+        public Pet checkOutPet(int id)
+        {
+            Pet toUpdate = _context.Pets.Find(id);
+            if(toUpdate is null){
+                Response.StatusCode=404;
+                return null;
+            }
+            toUpdate.checkedinAt = null;
+
+            _context.SaveChanges();
+            return toUpdate;
+        }
         // [HttpGet]
         // [Route("test")]
         // public IEnumerable<Pet> GetPets() {
