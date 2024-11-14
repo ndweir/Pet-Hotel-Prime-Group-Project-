@@ -5,7 +5,14 @@ using System;
 
 namespace pet_hotel
 {
-    public enum PetBreedType {}
-    public enum PetColorType {}
+    public enum PetBreedType : byte 
+    {
+        Shepherd, Poodle, Beagle, Bulldog, Terrier, Boxer, Labrador, Retriever
+    }
+    public enum PetColorType : byte
+     {
+        White, Black, Golden, Tricolor, Spotted
+
+     }
     public class Pet {}
 }
