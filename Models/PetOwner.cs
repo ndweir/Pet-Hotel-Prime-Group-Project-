@@ -8,13 +8,18 @@ namespace pet_hotel
     public class PetOwner {
         public int id {get; set;}
 
+        [Required]
+        [EmailAddress(ErrorMessage = "Invalid email address.")] 
         public string emailAddress {get; set;}
 
-        public string name {get; set;}
+       [Required]
+       public string name {get; set;}
 
+        [NotMapped]
         public int petCount {get; set;}
 
-
+        [JsonIgnore]
+        public List<Pet> petList {get; set;}
 
     }
 }
