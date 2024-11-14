@@ -22,5 +22,16 @@ namespace pet_hotel.Controllers
         public IEnumerable<PetOwner> GetPets() {
             return new List<PetOwner>();
         }
+
+        [HttpGet("{id}")]
+        public ActionResult<PetOwner> GetById(int id){
+            PetOwner petOwner = _context.PetOwners
+            .SingleOrDefault(petOwner => petOwner.id == id);
+
+            if(petOwner is null){
+                return NotFound();
+            }
+            return petOwner;
+        }
     }
 }
